@@ -1,0 +1,42 @@
+<html>
+<head>
+	<script src="js/raphael-min.js" type="text/javascript"></script>
+	<script src="js/timeline.js" type="text/javascript"></script>
+</head>
+<body>
+	<div id="timeline1" style="width:500px;height: 200px;"></div>
+	<div id="timeline2" style="width:500px;height: 200px;"></div>
+	<div id="timeline3" style="width:500px;height: 200px;"></div>
+	
+	<div id='event-description'></div>
+	<script type="text/javascript">
+	
+		var p1 = Raphael('timeline1', 1000, 200);
+		var apple_products = [{'name':'iPod','date':'2001-10-23','description':'mp3 player'},
+					  {'name':'iPhone', 'date': '2007-6-29','description':'touchscreen smartphone'},
+					  {'name':'iPad', 'date':'2010-1-27', 'description':'touchscreen tablet'}];
+					
+		p1.timeline.draw({events: apple_products, color:'#f0f'}, function(product) {
+			alert(product.name + ': ' + product.description);
+		});
+		
+		var p2 = Raphael('timeline2', 500, 200);
+		var todos = [{'name': 'idea formation', 'date':'2010-3-28', 'task':'create a minimal and beautiful timeline'},
+					{'name': 'Raphael plugin', 'date':'2010-3-29', 'task':'mess around with the plugin'},
+					{'name': 'coding', 'date':'2010-3-30', 'task': 'draw event circles and time scale'},
+					{'name': 'first release', 'date':'2010-4-2', 'task':'create demo and README, push to github'}
+					];
+		p2.timeline.draw({events: todos, color: '#0ff'}, function(todo) {
+			alert(todo.date + ': ' + todo.task);
+		});
+		
+		p3 = Raphael('timeline3', 600, 200);
+		apps = [{'name': 'angry birds', 'date':'2009-12-15', 'description':'puzzle game', 'url':'http://www.rovio.com/index.php?page=angry-birds'},
+				{'name': 'instapaper', 'date':'2010-3-10', 'description':'read long articles without distraction', 'url':'http://instapaper.com'}];
+		p3.timeline.draw({events: apps, color: '#ff0'}, function(app) {
+			document.getElementById('event-description').innerHTML = "<div style='font-size:1.1em'><a href='" + app.url + "'>" + app.name + "</a> (" + app.date + ")</div>" + app.description;	
+		});
+	</script>
+	
+</body>
+</html>
