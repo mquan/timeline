@@ -132,9 +132,9 @@ Raphael.fn.timeline = {
 						highlight_r: options.highlight_r || 10,
 						highlight_fill: options.highlight_fill || options.color || '#f00',
 						normal_fill: options.normal_fill || '#fff',
-						bubble_color: options.bubble_color || options.color || '#f00',
-						bubble_fill: options.bubble_fill || '#fff'
-								},
+						popup_text_attr: options.popup_text_attr || {fill:'#000', font: '10px verdana, arial, helvetica, sans-serif'},
+						popup_attr: options.bubble_attr || {fill: options.normal_fill||'#fff', "stroke-width":2, stroke: options.color||'#f00'}
+						},
 			//sort events by date in ascending order
 			sorted_events = options.events.sort(TimelineHelper.sort_by_date(false)),
 			pixels_per_day = 100,
@@ -155,11 +155,9 @@ Raphael.fn.timeline = {
 	draw_events: function(events, settings, params, describe) {
 		var dots = [],
 			last = params.x_offset,
-			txt_attr = {font: '10px verdana, arial, helvetica, sans-serif'},
-			title = this.text(40, params.y_offset - 25, 'title').attr(txt_attr).attr({'font-weight': 'bold', 'font-size': '12px'}),
-			date = this.text(40, params.y_offset-10, 'date').attr(txt_attr),
+			title = this.text(40, params.y_offset - 25, 'title').attr(settings.popup_text_attr).attr({'font-weight': 'bold', 'font-size': '12px'}),
+			date = this.text(40, params.y_offset-10, 'date').attr(settings.popup_text_attr),
 			label = this.set().push(title, date).hide(),
-			popup_attr = {fill:settings.bubble_fill, "stroke-width":2, stroke: settings.bubble_color},
 			popup = '';
 						
 		for(var i=0;i<events.length;i++) {
@@ -183,14 +181,14 @@ Raphael.fn.timeline = {
 					date.attr({text: event.date});
 					label.show();
 					var x = this.getBBox().x + this.getBBox().width/2;
-					popup = canvas.popup(x, params.y_offset-15, label, "top-middle").attr(popup_attr);						
+					popup = canvas.popup(x, params.y_offset-15, label, "top-middle").attr(settings.popup_attr);						
 					if(popup.getBBox().x < params.x_offset) {
 						popup.remove();
-						popup = canvas.popup(x, params.y_offset-15, label, "top-left").attr(popup_attr);
+						popup = canvas.popup(x, params.y_offset-15, label, "top-left").attr(settings.popup_attr);
 					}
 					else if((popup.getBBox().x + popup.getBBox().width) > (canvas.width - 40)) {
 						popup.remove();
-						popup = canvas.popup(x, params.y_offset-15, label, "top-right").attr(popup_attr);
+						popup = canvas.popup(x, params.y_offset-15, label, "top-right").attr(settings.popup_attr);
 					}
 					document.body.style.cursor = "pointer";
 				}, function() {
