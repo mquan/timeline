@@ -26,7 +26,7 @@
 					{name: 'coding', date:'2010-3-30', task: 'draw event circles and time scale'},
 					{name: 'first release', date:'2010-4-2', task:'create demo and README, push to github'}
 					];
-		p2.timeline.draw({events: todos, color: '#0ff'}, function(todo) {
+		p2.timeline.draw({events: todos, color: '#0ff', select_index: 2}, function(todo) {
 			alert(todo.date + ': ' + todo.task);
 		});
 		

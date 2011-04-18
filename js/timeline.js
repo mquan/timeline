@@ -120,20 +120,18 @@ var tokenRegex = /\{([^\}]+)\}/g,
             return out;
     };
 })();
-//storyline should not be on a separate page (the use flow isn't like that)
-//compute storyline in create, if a decent story exists then show it on the show page
-//for bookmarklet request show the storyline in popup
 
 (function () {
 Raphael.fn.timeline = {
-	draw: function(options, describe) {
+	draw: function(options, fclick) {
 		var settings = {color: options.color || '#f00',
 						normal_r: options.normal_r || 7,
 						highlight_r: options.highlight_r || 10,
 						highlight_fill: options.highlight_fill || options.color || '#f00',
 						normal_fill: options.normal_fill || '#fff',
 						popup_text_attr: options.popup_text_attr || {fill:'#000', font: '10px verdana, arial, helvetica, sans-serif'},
-						popup_attr: options.bubble_attr || {fill: options.normal_fill||'#fff', "stroke-width":2, stroke: options.color||'#f00'}
+						popup_attr: options.popup_attr || {fill: options.normal_fill||'#fff', "stroke-width":2, stroke: options.color||'#f00'},
+						select_index: options.select_index || 0
 						},
 			//sort events by date in ascending order
 			sorted_events = options.events.sort(TimelineHelper.sort_by_date(false)),
@@ -148,11 +146,11 @@ Raphael.fn.timeline = {
 
 		this.timeline.draw_timescale(sorted_events, {x_offset: 30, days_range: days_range});
 
-		this.timeline.draw_events(sorted_events, settings, {pixels_per_day: pixels_per_day, x_offset: 30, y_offset: this.height-70}, describe);
-				
+		dots = this.timeline.draw_events(sorted_events, settings, {pixels_per_day: pixels_per_day, x_offset: 30, y_offset: this.height-70}, fclick);
+		TimelineHelper.highlight(sorted_events, dots, settings.select_index, fclick, settings);	
 	},
 	
-	draw_events: function(events, settings, params, describe) {
+	draw_events: function(events, settings, params, fclick) {
 		var dots = [],
 			last = params.x_offset,
 			title = this.text(40, params.y_offset - 25, 'title').attr(settings.popup_text_attr).attr({'font-weight': 'bold', 'font-size': '12px'}),
@@ -199,7 +197,7 @@ Raphael.fn.timeline = {
 				});
 			
 				dots[i].click(function() {
-					describe(event);
+					fclick(event);
 					for(var j=0;j<dots.length;j++) {
 						dots[j].attr({fill:settings.normal_fill});
 					}
@@ -207,6 +205,7 @@ Raphael.fn.timeline = {
 				});
 			})(this, events[i]);
 		}
+		return dots;
 	},
 	
 	//draw timescale marks
@@ -325,5 +324,13 @@ TimelineHelper.next_unit = function(d, days_range) {
 		var r = d.getFullYear() % 5;
 		return new Date(d.getFullYear()+(5-r), 0, 1);
 	}
+};
+
+TimelineHelper.highlight = function(events, dots, index, fclick, settings) {
+	fclick(events[index]);
+	for(var j=0;j<dots.length;j++) {
+		dots[j].attr({fill:settings.normal_fill});
+	}
+	dots[index].attr({fill: settings.highlight_fill});
 };
 })();
