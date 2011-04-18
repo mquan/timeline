@@ -1,4 +1,4 @@
-timeline.js is a Raphaeljs' plugin that creates a timeline from an input array of events. Each event element is a json object with 2 required fields 'name' and 'date', you can have any number of extra fields. Hovering over the event on the timeline will bring up a bubble showing its name and date. Clicking on the event will highlight it and execute a function supplied by you. This describe function takes the selected event as input, check out the example for more details.
+timeline.js is a Raphaeljs' plugin that creates a timeline from an input array of events. Each event element is a json object with 2 required fields 'name' and 'date' (in YYYY-MM-DD format), you can have any number of extra fields. Hovering over the event on the timeline will bring up a bubble showing its name and date. Clicking on the event will highlight it and execute a function supplied by you. This fclick function takes the selected event as input, check out the example for more details.
 Quick start:
 
 <html>
